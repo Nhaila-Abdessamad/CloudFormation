@@ -59,6 +59,8 @@ Conditions:
   Launch9: !Or
   - !Equals [9, !Ref InstanceCount]
   - !Equals [10, !Ref InstanceCount]
+  Launch10: !Or
+  - !Equals [10, !Ref InstanceCount]
 
 Resources:
   InstanceSecurityGroup:
