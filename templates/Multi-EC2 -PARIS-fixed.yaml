@@ -135,9 +135,8 @@ Resources:
             cd ..
             cd nifi-1.17.0/ 
             bin/nifi.sh start
-            echo "hello" > /home/ec2-user/nifi-credentials.info 
-            chmod 777  /home/ec2-user/nifi-credentials.info  
-            cat /home/ec2-user/nifi-1.17.0/logs/nifi-ap*.log | grep Generated > /home/ec2-user/nifi-credentials.info
+            echo "sudo touch cred.info | sudo chmod 777 cred.info |  sudo cat /home/ec2-user/nifi-1.17.0/logs/nifi-ap*.log | grep Generated > cred.info" > get_nifi_creds.sh
+            chmod +x get_nifi_creds.sh
             cd ..
             mkdir data
             mkdir data/history
@@ -195,7 +194,8 @@ Resources:
             cd ..
             cd nifi-1.17.0/ 
             bin/nifi.sh start
-            cat /home/ec2-user/nifi-1.17.0/logs/nifi-ap*.log | grep Generated > /home/ec2-user/nifi-credentials.info
+            echo "sudo touch cred.info | sudo chmod 777 cred.info |  sudo cat /home/ec2-user/nifi-1.17.0/logs/nifi-ap*.log | grep Generated > cred.info" > get_nifi_creds.sh
+            chmod +x get_nifi_creds.sh
             cd ..
             mkdir data
             mkdir data/history
@@ -253,7 +253,8 @@ Resources:
             cd ..
             cd nifi-1.17.0/ 
             bin/nifi.sh start
-            cat /home/ec2-user/nifi-1.17.0/logs/nifi-ap*.log | grep Generated > /home/ec2-user/nifi-credentials.info
+            echo "sudo touch cred.info | sudo chmod 777 cred.info |  sudo cat /home/ec2-user/nifi-1.17.0/logs/nifi-ap*.log | grep Generated > cred.info" > get_nifi_creds.sh
+            chmod +x get_nifi_creds.sh
             cd ..
             mkdir data
             mkdir data/history
@@ -311,7 +312,8 @@ Resources:
             cd ..
             cd nifi-1.17.0/ 
             bin/nifi.sh start
-            cat /home/ec2-user/nifi-1.17.0/logs/nifi-ap*.log | grep Generated > /home/ec2-user/nifi-credentials.info
+            echo "sudo touch cred.info | sudo chmod 777 cred.info |  sudo cat /home/ec2-user/nifi-1.17.0/logs/nifi-ap*.log | grep Generated > cred.info" > get_nifi_creds.sh
+            chmod +x get_nifi_creds.sh
             cd ..
             mkdir data
             mkdir data/history
@@ -369,7 +371,8 @@ Resources:
             cd ..
             cd nifi-1.17.0/ 
             bin/nifi.sh start
-            cat /home/ec2-user/nifi-1.17.0/logs/nifi-ap*.log | grep Generated > /home/ec2-user/nifi-credentials.info
+            echo "sudo touch cred.info | sudo chmod 777 cred.info |  sudo cat /home/ec2-user/nifi-1.17.0/logs/nifi-ap*.log | grep Generated > cred.info" > get_nifi_creds.sh
+            chmod +x get_nifi_creds.sh
             cd ..
             mkdir data
             mkdir data/history
@@ -427,7 +430,8 @@ Resources:
             cd ..
             cd nifi-1.17.0/ 
             bin/nifi.sh start
-            cat /home/ec2-user/nifi-1.17.0/logs/nifi-ap*.log | grep Generated > /home/ec2-user/nifi-credentials.info
+            echo "sudo touch cred.info | sudo chmod 777 cred.info |  sudo cat /home/ec2-user/nifi-1.17.0/logs/nifi-ap*.log | grep Generated > cred.info" > get_nifi_creds.sh
+            chmod +x get_nifi_creds.sh
             cd ..
             mkdir data
             mkdir data/history
@@ -485,7 +489,8 @@ Resources:
             cd ..
             cd nifi-1.17.0/ 
             bin/nifi.sh start
-            cat /home/ec2-user/nifi-1.17.0/logs/nifi-ap*.log | grep Generated > /home/ec2-user/nifi-credentials.info
+            echo "sudo touch cred.info | sudo chmod 777 cred.info |  sudo cat /home/ec2-user/nifi-1.17.0/logs/nifi-ap*.log | grep Generated > cred.info" > get_nifi_creds.sh
+            chmod +x get_nifi_creds.sh
             cd ..
             mkdir data
             mkdir data/history
@@ -543,7 +548,8 @@ Resources:
             cd ..
             cd nifi-1.17.0/ 
             bin/nifi.sh start
-            cat /home/ec2-user/nifi-1.17.0/logs/nifi-ap*.log | grep Generated > /home/ec2-user/nifi-credentials.info
+            echo "sudo touch cred.info | sudo chmod 777 cred.info |  sudo cat /home/ec2-user/nifi-1.17.0/logs/nifi-ap*.log | grep Generated > cred.info" > get_nifi_creds.sh
+            chmod +x get_nifi_creds.sh
             cd ..
             mkdir data
             mkdir data/history
@@ -601,7 +607,8 @@ Resources:
             cd ..
             cd nifi-1.17.0/ 
             bin/nifi.sh start
-            cat /home/ec2-user/nifi-1.17.0/logs/nifi-ap*.log | grep Generated > /home/ec2-user/nifi-credentials.info
+            echo "sudo touch cred.info | sudo chmod 777 cred.info |  sudo cat /home/ec2-user/nifi-1.17.0/logs/nifi-ap*.log | grep Generated > cred.info" > get_nifi_creds.sh
+            chmod +x get_nifi_creds.sh
             cd ..
             mkdir data
             mkdir data/history
@@ -659,7 +666,8 @@ Resources:
             cd ..
             cd nifi-1.17.0/ 
             bin/nifi.sh start
-            cat /home/ec2-user/nifi-1.17.0/logs/nifi-ap*.log | grep Generated > /home/ec2-user/nifi-credentials.info
+            echo "sudo touch cred.info | sudo chmod 777 cred.info |  sudo cat /home/ec2-user/nifi-1.17.0/logs/nifi-ap*.log | grep Generated > cred.info" > get_nifi_creds.sh
+            chmod +x get_nifi_creds.sh
             cd ..
             mkdir data
             mkdir data/history
