@@ -1,0 +1,91 @@
+Description: Create a variable number of EC2 instance resources.
+Parameters:
+  MachineName:
+    Description: The Name of The Machine 
+    Type: String
+    Default: ES
+    #MinValue: 1
+    #MaxValue: 10
+    #ConstraintDescription: Must be a number between 1 and 10.
+  ImageId:
+    Description: Image ID to launch EC2 instances.
+    Type: AWS::EC2::Image::Id
+    # amzn-ami-hvm-2016.09.1.20161221-x86_64-gp2
+    Default: ami-034a15da241168b0c  #ami-01c27425d7e6aee47  #us-east-1 ami-026b57f3c383c2eec
+  InstanceType:
+    Description: Instance type to launch EC2 instances.
+    Type: String
+    Default: t3.large
+    # AllowedValues: [t3.large]
+
+Resources:
+  InstanceSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Allow http to client host
+      VpcId: vpc-0dbe78f14f6c103bf
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+      SecurityGroupEgress:
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 443
+          ToPort: 443
+          CidrIp: 0.0.0.0/0
+      Tags: 
+        - Key: Name
+          Value: !Ref MachineName
+  Instance1:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: !Ref ImageId
+      KeyName: "training"
+      InstanceType: !Ref InstanceType
+      NetworkInterfaces:
+        - AssociatePublicIpAddress: 'True'
+          DeleteOnTermination: 'True'
+          SubnetId: subnet-0df7ea3c358d6e62d
+          DeviceIndex: '0'
+          GroupSet: [{ "Fn::GetAtt" : ["InstanceSecurityGroup", "GroupId"] }] 
+      BlockDeviceMappings:
+        - DeviceName: "/dev/xvda"
+          Ebs:
+              VolumeSize: 20
+      UserData:
+          Fn::Base64: 
+            !Sub |
+            #!/bin/bash   
+            sudo su
+            cd /home/ec2-user
+            # Set ALL NEEDED EXPORTS in .bashrc
+            echo "export PS1=\"\[\e[32m\][\[\e[m\]\[\e[31m\]\u\[\e[m\]\[\e[33m\]@\[\e[m\]\[\e[32m\]\h\[\e[m\]:\[\e[36m\]\w\[\e[m\]\[\e[32m\]]\\$\[\e[m\] \" " > .bashrc 
+            . .bashrc
+            # SET User Password
+            echo "linux" | passwd --stdin ec2-user
+            
+      Tags: 
+        - Key: Name
+          Value: !Ref MachineName
+  #EIP1:
+    #Type: AWS::EC2::EIP
+    #Properties:
+      #InstanceId: !Ref Instance1
+      #Domain: vpc
+
+  #EIP3:
+  #Type: AWS::EC2::EIP
+  #Properties:
+  #  InstanceId: !Ref Instance2
+  
+Outputs:
+  PublicIP:
+    Description: Public Ip of first EC2 instance
+    Value: { "Fn::GetAtt" : [ "Instance1", "PublicIp" ]}
+    
+

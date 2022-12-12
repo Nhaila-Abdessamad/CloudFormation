@@ -1,0 +1,2 @@
+- Password EC2 AMI: ami-034a15da241168b0c
+- Elastic Search AMI: ami-075013eed3a88d516 

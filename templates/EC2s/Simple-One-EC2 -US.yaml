@@ -1,0 +1,133 @@
+Description: Create a variable number of EC2 instance resources.
+Parameters:
+  MachineName:
+    Description: The Name of The Machine 
+    Type: String
+    Default: WS-ENV
+    #MinValue: 1
+    #MaxValue: 10
+    #ConstraintDescription: Must be a number between 1 and 10.
+  ImageId:
+    Description: Image ID to launch EC2 instances.
+    Type: AWS::EC2::Image::Id
+    # amzn-ami-hvm-2016.09.1.20161221-x86_64-gp2
+    Default: ami-034a15da241168b0c   #ami-026b57f3c383c2eec  #us-east-1 ami-026b57f3c383c2eec
+  InstanceType:
+    Description: Instance type to launch EC2 instances.
+    Type: String
+    Default: t3.large
+    # AllowedValues: [t3.large]
+
+Resources:
+  InstanceSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Allow http to client host
+      VpcId: vpc-0dbe78f14f6c103bf
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+      SecurityGroupEgress:
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 443
+          ToPort: 443
+          CidrIp: 0.0.0.0/0
+      Tags: 
+        - Key: Name
+          Value: !Ref MachineName
+  Instance1:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: !Ref ImageId
+      KeyName: "training"
+      InstanceType: !Ref InstanceType
+      NetworkInterfaces:
+        - AssociatePublicIpAddress: 'True'
+          DeleteOnTermination: 'True'
+          SubnetId: subnet-0df7ea3c358d6e62d
+          DeviceIndex: '0'
+          GroupSet: [{ "Fn::GetAtt" : ["InstanceSecurityGroup", "GroupId"] }] 
+      BlockDeviceMappings:
+        - DeviceName: "/dev/xvda"
+          Ebs:
+              VolumeSize: 20
+      UserData:
+          Fn::Base64: 
+            !Sub |
+            #!/bin/bash   
+            sudo su
+            cd /home/ec2-user
+            # Set ALL NEEDED EXPORTS in .bashrc
+            echo "export PS1=\"\[\e[32m\][\[\e[m\]\[\e[31m\]\u\[\e[m\]\[\e[33m\]@\[\e[m\]\[\e[32m\]\h\[\e[m\]:\[\e[36m\]\w\[\e[m\]\[\e[32m\]]\\$\[\e[m\] \" " > .bashrc 
+            . .bashrc
+            # SET User Password
+            echo "elasticsearch" | passwd --stdin ec2-user
+
+            # Install Prerequisites:
+            yum update -y
+            yum install java-11-amazon-corretto-headless -y
+            update-alternatives --set java /usr/lib/jvm/java-11-amazon-corretto.x86_64/bin/java
+            yum install -y git
+            yum install -y wget
+            yum -y install docker
+            service docker start
+            chmod 666 /var/run/docker.sock
+            curl -L https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose
+            chmod +x /usr/local/bin/docker-compose
+
+            # Download and unzip required packages
+            wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.6.2-x86_64.rpm
+            rpm -i elasticsearch-7.6.2-x86_64.rpm
+
+            wget https://artifacts.elastic.co/downloads/logstash/logstash-7.6.2.rpm
+            rpm -i logstash-7.6.2.rpm
+
+            wget https://artifacts.elastic.co/downloads/kibana/kibana-7.6.2-x86_64.rpm
+            rpm -i kibana-7.6.2-x86_64.rpm
+
+            git clone https://github.com/Nhaila-Abdessamad/Full-Text-Search-App-ES.git
+
+            # Modify Files as needed
+            sed -i 's/#server.host: "localhost"/server.host: "0.0.0.0"/g' /etc/kibana/kibana.yml
+            sed -i 's/#server.port: 5601/server.port: 5601/g' /etc/kibana/kibana.yml
+            sed -i 's/8-13:-XX:+UseConcMarkSweepGC/#8-13:-XX:+UseConcMarkSweepGC/g' /etc/elasticsearch/jvm.options
+            chmod -R ugo+rwx Full-Text-Search-App-ES
+            sed -i "s/localhost/$(curl http://checkip.amazonaws.com)/g" /home/ec2-user/Full-Text-Search-App-ES/public/app.js
+
+            cd Full-Text-Search-App-ES
+            echo "docker-compose up -d --build" > run_Capstone_Proj.sh
+            #echo "echo "Thanks for waiting (90s) : ElasticSearch Service is becoming ready."" >> run_Capstone_Proj.sh 
+            echo "sleep 90" >> run_Capstone_Proj.sh 
+            echo "docker exec gs-api "node" "server/load_data.js"" >> run_Capstone_Proj.sh
+            echo "docker-compose up -d --build" >> run_Capstone_Proj.sh   
+            chmod +x run_Capstone_Proj.sh
+
+            # Start Services
+            # sudo -i service elasticsearch start
+            # sudo -i service kibana start
+
+      Tags: 
+        - Key: Name
+          Value: !Ref MachineName
+  #EIP1:
+    #Type: AWS::EC2::EIP
+    #Properties:
+      #InstanceId: !Ref Instance1
+      #Domain: vpc
+
+  #EIP3:
+  #Type: AWS::EC2::EIP
+  #Properties:
+  #  InstanceId: !Ref Instance2
+  
+Outputs:
+  PublicIP:
+    Description: Public Ip of first EC2 instance
+    Value: { "Fn::GetAtt" : [ "Instance1", "PublicIp" ]}
+    

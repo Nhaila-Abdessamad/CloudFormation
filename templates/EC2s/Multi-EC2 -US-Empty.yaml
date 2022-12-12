@@ -1,0 +1,472 @@
+Description: Create a variable number of EC2 instance resources.
+Parameters:
+  InstanceCount:
+    Description: Number of EC2 instances (must be between 1 and 10).
+    Type: Number
+    Default: 2
+    MinValue: 1
+    MaxValue: 10
+    #ConstraintDescription: Must be a number between 1 and 10.
+  ImageId:
+    Description: Image ID to launch EC2 instances.
+    Type: AWS::EC2::Image::Id
+    # amzn-ami-hvm-2016.09.1.20161221-x86_64-gp2
+    Default: ami-034a15da241168b0c  #us-east-1 ami-026b57f3c383c2eec
+  InstanceType:
+    Description: Instance type to launch EC2 instances.
+    Type: String
+    Default: t3.large
+    # AllowedValues: [t3.large]
+  MachineName:
+    Description: The Name of The Machine 
+    Type: String
+    Default: ElasticSearch
+    #MinValue: 1
+    #MaxValue: 10
+    #ConstraintDescription: Must be a number between 1 and 10.
+  subnetId:
+    Description: The subnet that isolates all the resources
+    Type: String
+    Default: subnet-0df7ea3c358d6e62d
+  keyName:
+    Description: The KeyPair That allows SSH Into Instances
+    Type: String
+    Default: "training"
+
+Conditions:
+  Launch1: !Equals [1, 1]
+  Launch2: !Not [!Equals [1, !Ref InstanceCount]]
+  Launch3: !And
+  - !Not [!Equals [1, !Ref InstanceCount]]
+  - !Not [!Equals [2, !Ref InstanceCount]]
+  Launch4: !And
+  - !Not [!Equals [1, !Ref InstanceCount]]
+  - !Not [!Equals [2, !Ref InstanceCount]]
+  - !Not [!Equals [3, !Ref InstanceCount]]
+  Launch5: !And
+  - !Not [!Equals [1, !Ref InstanceCount]]
+  - !Not [!Equals [2, !Ref InstanceCount]]
+  - !Not [!Equals [3, !Ref InstanceCount]]
+  - !Not [!Equals [4, !Ref InstanceCount]]
+  Launch6: !Or
+  - !Equals [6, !Ref InstanceCount]
+  - !Equals [7, !Ref InstanceCount]
+  - !Equals [8, !Ref InstanceCount]
+  - !Equals [9, !Ref InstanceCount]
+  - !Equals [10, !Ref InstanceCount]
+  Launch7: !Or
+  - !Equals [7, !Ref InstanceCount]
+  - !Equals [8, !Ref InstanceCount]
+  - !Equals [9, !Ref InstanceCount]
+  - !Equals [10, !Ref InstanceCount]
+  Launch8: !Or
+  - !Equals [8, !Ref InstanceCount]
+  - !Equals [9, !Ref InstanceCount]
+  - !Equals [10, !Ref InstanceCount]
+  Launch9: !Or
+  - !Equals [9, !Ref InstanceCount]
+  - !Equals [10, !Ref InstanceCount]
+  Launch10: !Or
+  - !Equals [10, !Ref InstanceCount]
+  - !Equals [11, !Ref InstanceCount]
+
+Resources:
+  InstanceSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Allow http to client host
+      VpcId: vpc-0dbe78f14f6c103bf
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+      SecurityGroupEgress:
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 443
+          ToPort: 443
+          CidrIp: 0.0.0.0/0
+      Tags: 
+        - Key: Name
+          Value: !Ref MachineName
+  Instance1:
+    Condition: Launch1
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: !Ref ImageId
+      KeyName: "training"
+      InstanceType: !Ref InstanceType
+      NetworkInterfaces:
+        - AssociatePublicIpAddress: 'False'
+          DeleteOnTermination: 'True'
+          SubnetId: !Ref subnetId
+          DeviceIndex: '0'
+          GroupSet: [{ "Fn::GetAtt" : ["InstanceSecurityGroup", "GroupId"] }] 
+      BlockDeviceMappings:
+        - DeviceName: "/dev/xvda"
+          Ebs:
+              VolumeSize: 20
+      UserData:
+          Fn::Base64: 
+            !Sub |
+            #!/bin/bash   
+            sudo su
+            cd /home/ec2-user
+            # Set ALL NEEDED EXPORTS in .bashrc
+            echo "export PS1=\"\[\e[32m\][\[\e[m\]\[\e[31m\]\u\[\e[m\]\[\e[33m\]@\[\e[m\]\[\e[32m\]\h\[\e[m\]:\[\e[36m\]\w\[\e[m\]\[\e[32m\]]\\$\[\e[m\] \" " > .bashrc 
+            . .bashrc
+            # SET User Password
+            echo "elasticsearch" | passwd --stdin ec2-user
+
+            # Install Prerequisites:
+            yum update -y
+      Tags: 
+        - Key: Name
+          Value: !Ref MachineName
+  Instance2:
+    Condition: Launch2
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: !Ref ImageId
+      KeyName: "training"
+      InstanceType: !Ref InstanceType
+      NetworkInterfaces:
+        - AssociatePublicIpAddress: 'False'
+          DeleteOnTermination: 'True'
+          SubnetId: !Ref subnetId
+          DeviceIndex: '0'
+          GroupSet: [{ "Fn::GetAtt" : ["InstanceSecurityGroup", "GroupId"] }] 
+      BlockDeviceMappings:
+        - DeviceName: "/dev/xvda"
+          Ebs:
+              VolumeSize: 20
+      UserData:
+          Fn::Base64: 
+            !Sub |
+            #!/bin/bash   
+            sudo su
+            cd /home/ec2-user
+            # Set ALL NEEDED EXPORTS in .bashrc
+            echo "export PS1=\"\[\e[32m\][\[\e[m\]\[\e[31m\]\u\[\e[m\]\[\e[33m\]@\[\e[m\]\[\e[32m\]\h\[\e[m\]:\[\e[36m\]\w\[\e[m\]\[\e[32m\]]\\$\[\e[m\] \" " > .bashrc 
+            . .bashrc
+            # SET User Password
+            echo "elasticsearch" | passwd --stdin ec2-user
+
+            # Install Prerequisites:
+            yum update -y
+            
+      Tags: 
+        - Key: Name
+          Value: !Ref MachineName
+  Instance3:
+    Condition: Launch3
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: !Ref ImageId
+      KeyName: "training"
+      InstanceType: !Ref InstanceType
+      NetworkInterfaces:
+        - AssociatePublicIpAddress: 'False'
+          DeleteOnTermination: 'True'
+          SubnetId: !Ref subnetId
+          DeviceIndex: '0'
+          GroupSet: [{ "Fn::GetAtt" : ["InstanceSecurityGroup", "GroupId"] }] 
+      BlockDeviceMappings:
+        - DeviceName: "/dev/xvda"
+          Ebs:
+              VolumeSize: 20
+      UserData:
+          Fn::Base64: 
+            !Sub |
+            #!/bin/bash   
+            sudo su
+            cd /home/ec2-user
+            # Set ALL NEEDED EXPORTS in .bashrc
+            echo "export PS1=\"\[\e[32m\][\[\e[m\]\[\e[31m\]\u\[\e[m\]\[\e[33m\]@\[\e[m\]\[\e[32m\]\h\[\e[m\]:\[\e[36m\]\w\[\e[m\]\[\e[32m\]]\\$\[\e[m\] \" " > .bashrc 
+            . .bashrc
+            # SET User Password
+            echo "elasticsearch" | passwd --stdin ec2-user
+
+            # Install Prerequisites:
+            yum update -y
+      Tags: 
+        - Key: Name
+          Value: !Ref MachineName
+  Instance4:
+    Condition: Launch4
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: !Ref ImageId
+      KeyName: "training"
+      InstanceType: !Ref InstanceType
+      NetworkInterfaces:
+        - AssociatePublicIpAddress: 'False'
+          DeleteOnTermination: 'True'
+          SubnetId: !Ref subnetId
+          DeviceIndex: '0'
+          GroupSet: [{ "Fn::GetAtt" : ["InstanceSecurityGroup", "GroupId"] }] 
+      BlockDeviceMappings:
+        - DeviceName: "/dev/xvda"
+          Ebs:
+              VolumeSize: 20
+      UserData:
+          Fn::Base64: 
+            !Sub |
+            #!/bin/bash   
+            sudo su
+            cd /home/ec2-user
+            # Set ALL NEEDED EXPORTS in .bashrc
+            echo "export PS1=\"\[\e[32m\][\[\e[m\]\[\e[31m\]\u\[\e[m\]\[\e[33m\]@\[\e[m\]\[\e[32m\]\h\[\e[m\]:\[\e[36m\]\w\[\e[m\]\[\e[32m\]]\\$\[\e[m\] \" " > .bashrc 
+            . .bashrc
+            # SET User Password
+            echo "elasticsearch" | passwd --stdin ec2-user
+
+            # Install Prerequisites:
+            yum update -y
+      Tags: 
+        - Key: Name
+          Value: !Ref MachineName
+  Instance5:
+    Condition: Launch5
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: !Ref ImageId
+      KeyName: "training"
+      InstanceType: !Ref InstanceType
+      NetworkInterfaces:
+        - AssociatePublicIpAddress: 'False'
+          DeleteOnTermination: 'True'
+          SubnetId: !Ref subnetId
+          DeviceIndex: '0'
+          GroupSet: [{ "Fn::GetAtt" : ["InstanceSecurityGroup", "GroupId"] }] 
+      BlockDeviceMappings:
+        - DeviceName: "/dev/xvda"
+          Ebs:
+              VolumeSize: 20
+      UserData:
+          Fn::Base64: 
+            !Sub |
+            #!/bin/bash   
+            sudo su
+            cd /home/ec2-user
+            # Set ALL NEEDED EXPORTS in .bashrc
+            echo "export PS1=\"\[\e[32m\][\[\e[m\]\[\e[31m\]\u\[\e[m\]\[\e[33m\]@\[\e[m\]\[\e[32m\]\h\[\e[m\]:\[\e[36m\]\w\[\e[m\]\[\e[32m\]]\\$\[\e[m\] \" " > .bashrc 
+            . .bashrc
+            # SET User Password
+            echo "elasticsearch" | passwd --stdin ec2-user
+
+            # Install Prerequisites:
+            yum update -y
+      Tags: 
+        - Key: Name
+          Value: !Ref MachineName
+  Instance6:
+    Condition: Launch6
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: !Ref ImageId
+      KeyName: "training"
+      InstanceType: !Ref InstanceType
+      NetworkInterfaces:
+        - AssociatePublicIpAddress: 'False'
+          DeleteOnTermination: 'True'
+          SubnetId: !Ref subnetId
+          DeviceIndex: '0'
+          GroupSet: [{ "Fn::GetAtt" : ["InstanceSecurityGroup", "GroupId"] }] 
+      BlockDeviceMappings:
+        - DeviceName: "/dev/xvda"
+          Ebs:
+              VolumeSize: 20
+      UserData:
+          Fn::Base64: 
+            !Sub |
+            #!/bin/bash   
+            sudo su
+            cd /home/ec2-user
+            # Install Prerequisites
+            yum update -y
+      Tags: 
+        - Key: Name
+          Value: !Ref MachineName
+  Instance7:
+    Condition: Launch7
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: !Ref ImageId
+      KeyName: "training"
+      InstanceType: !Ref InstanceType
+      NetworkInterfaces:
+        - AssociatePublicIpAddress: 'False'
+          DeleteOnTermination: 'True'
+          SubnetId: !Ref subnetId
+          DeviceIndex: '0'
+          GroupSet: [{ "Fn::GetAtt" : ["InstanceSecurityGroup", "GroupId"] }] 
+      BlockDeviceMappings:
+        - DeviceName: "/dev/xvda"
+          Ebs:
+              VolumeSize: 20
+      UserData:
+          Fn::Base64: 
+            !Sub |
+            #!/bin/bash   
+            sudo su
+            cd /home/ec2-user
+            # Install Prerequisites
+            yum update -y
+      Tags: 
+        - Key: Name
+          Value: !Ref MachineName
+  Instance8:
+    Condition: Launch7
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: !Ref ImageId
+      KeyName: "training"
+      InstanceType: !Ref InstanceType
+      NetworkInterfaces:
+        - AssociatePublicIpAddress: 'False'
+          DeleteOnTermination: 'True'
+          SubnetId: !Ref subnetId
+          DeviceIndex: '0'
+          GroupSet: [{ "Fn::GetAtt" : ["InstanceSecurityGroup", "GroupId"] }] 
+      BlockDeviceMappings:
+        - DeviceName: "/dev/xvda"
+          Ebs:
+              VolumeSize: 20
+      UserData:
+          Fn::Base64: 
+            !Sub |
+            #!/bin/bash   
+            sudo su
+            cd /home/ec2-user
+            # Install Prerequisites
+            yum update -y
+      Tags: 
+        - Key: Name
+          Value: !Ref MachineName
+  Instance9:
+    Condition: Launch7
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: !Ref ImageId
+      KeyName: "training"
+      InstanceType: !Ref InstanceType
+      NetworkInterfaces:
+        - AssociatePublicIpAddress: 'False'
+          DeleteOnTermination: 'True'
+          SubnetId: !Ref subnetId
+          DeviceIndex: '0'
+          GroupSet: [{ "Fn::GetAtt" : ["InstanceSecurityGroup", "GroupId"] }] 
+      BlockDeviceMappings:
+        - DeviceName: "/dev/xvda"
+          Ebs:
+              VolumeSize: 20
+      UserData:
+          Fn::Base64: 
+            !Sub |
+            #!/bin/bash   
+            sudo su
+            cd /home/ec2-user
+            # Install Prerequisites
+            yum update -y
+      Tags: 
+        - Key: Name
+          Value: !Ref MachineName
+  Instance10:
+    Condition: Launch7
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: !Ref ImageId
+      KeyName: "training"
+      InstanceType: !Ref InstanceType
+      NetworkInterfaces:
+        - AssociatePublicIpAddress: 'False'
+          DeleteOnTermination: 'True'
+          SubnetId: !Ref subnetId
+          DeviceIndex: '0'
+          GroupSet: [{ "Fn::GetAtt" : ["InstanceSecurityGroup", "GroupId"] }] 
+      BlockDeviceMappings:
+        - DeviceName: "/dev/xvda"
+          Ebs:
+              VolumeSize: 20
+      UserData:
+          Fn::Base64: 
+            !Sub |
+            #!/bin/bash   
+            sudo su
+            cd /home/ec2-user
+            # Install Prerequisites
+            yum update -y
+      Tags: 
+        - Key: Name
+          Value: !Ref MachineName
+  EIP1:
+    Condition: Launch1
+    Type: AWS::EC2::EIP
+    Properties:
+      InstanceId: !Ref Instance1
+      Domain: vpc
+  EIP2:
+    Condition: Launch2
+    Type: AWS::EC2::EIP
+    Properties:
+      InstanceId: !Ref Instance2
+      Domain: vpc
+  EIP3:
+    Condition: Launch3
+    Type: AWS::EC2::EIP
+    Properties:
+      InstanceId: !Ref Instance3
+      Domain: vpc
+  EIP4:
+    Condition: Launch4
+    Type: AWS::EC2::EIP
+    Properties:
+      InstanceId: !Ref Instance4
+      Domain: vpc
+  EIP5:
+    Condition: Launch5
+    Type: AWS::EC2::EIP
+    Properties:
+      InstanceId: !Ref Instance5
+      Domain: vpc
+  EIP6:
+    Condition: Launch6
+    Type: AWS::EC2::EIP
+    Properties:
+      InstanceId: !Ref Instance6
+      Domain: vpc
+  EIP7:
+    Condition: Launch7
+    Type: AWS::EC2::EIP
+    Properties:
+      InstanceId: !Ref Instance7
+      Domain: vpc
+  EIP8:
+    Condition: Launch8
+    Type: AWS::EC2::EIP
+    Properties:
+      InstanceId: !Ref Instance7
+      Domain: vpc
+  EIP9:
+    Condition: Launch9
+    Type: AWS::EC2::EIP
+    Properties:
+      InstanceId: !Ref Instance7
+      Domain: vpc
+  EIP10:
+    Condition: Launch10
+    Type: AWS::EC2::EIP
+    Properties:
+      InstanceId: !Ref Instance7
+      Domain: vpc
+  
+#Outputs:
+  #PublicIP:
+    #Description: Public Ip of first EC2 instance
+    #Value: { "Fn::GetAtt" : [ "Instance1", "PublicIp" ]}
+    
