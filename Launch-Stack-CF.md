@@ -26,7 +26,7 @@ Follow this link: [linlk](link) to be able to launch these machines.
 
 
 ### Open cloudformation in aws console (North-Verginea)
-
+![ CloudFormation Landing Page](https://github.com/Nhaila-Abdessamad/CloudFormation/blob/main/Figs/CF%20Landing.png "Text to show on mouseover")
 
 
 ### Click Create stack (choose with new resources)
