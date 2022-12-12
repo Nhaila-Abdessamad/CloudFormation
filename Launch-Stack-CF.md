@@ -8,17 +8,46 @@ to access the training environments and practice their craft.
 > The Instructors will provide you with specifications (number of instances, premade-configurations, type of instances ....) to which you 
 will respond with the excel file described above
 
+> There is mainly two types of enviornements we provide: Web Interfaced ubuntu Machines, and Amazon-Linux EC2 Instances
 
-> How To launch a stack with cloudformation
+> The former is delivered through the AWS Console, yet, it's in the process of being delivered with CloudFormation.
+Follow this link: [linlk](link) to be able to launch these machines.
+
+> The Latter is Delivered trhough CloudFormation, Follow These Instructions to be able to launch environements with CF.
 
 
 
 ## Steps to launch a stack
-- Open cloudformation in aws console (Paris)
-- Click Create stack (choose with new resources)
-- choose Upload template
-- upload one of the templates provided in this repo
-- hit next
-- give the stack a name and fill the parameters
-- next - next- create stack
+
+### Choose your region carefully
+- In Case you didn't know, most aws resources are region-sensitive, for example AMIs that work In North-Veginea won't Work in Paris REGION
+- That' why you have to choose the region and act based on it for what follows.
+- In this Tutorial we will use North-Verginea as our REGION
+
+
+### Open cloudformation in aws console (North-Verginea)
+
+
+
+### Click Create stack (choose with new resources)
+
+
+
+### choose Upload template
+
+
+
+### upload one of the templates provided in this repo
+
+
+
+### hit next
+
+
+
+### give the stack a name and fill the parameters
+
+
+
+### next - next- Submit
 
