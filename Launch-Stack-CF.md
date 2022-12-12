@@ -31,23 +31,20 @@ Follow this link: [linlk](link) to be able to launch these machines.
 
 ### Click Create stack (choose with new resources)
 
-
+![ CloudFormation Landing Page](https://github.com/Nhaila-Abdessamad/CloudFormation/blob/main/Figs/create%20Stack.png "Text to show on mouseover")
 
 ### choose Upload template
 
-
-
 ### upload one of the templates provided in this repo
 
-
+![ CloudFormation Landing Page](https://github.com/Nhaila-Abdessamad/CloudFormation/blob/main/Figs/Choose%20File.png "Text to show on mouseover")
 
 ### hit next
 
 
-
 ### give the stack a name and fill the parameters
 
-
+![ CloudFormation Landing Page](https://github.com/Nhaila-Abdessamad/CloudFormation/blob/main/Figs/Stack%20Name%20and%20Parameters.png "Text to show on mouseover")
 
 ### next - next- Submit
 
