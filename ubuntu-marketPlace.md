@@ -1,6 +1,6 @@
 
 
-
+## How to create a Linux Desktop Machine
 
 ### Pay The MarketPlace a visit
 - You Will Find The Product in this link [ Ubuntu Linux Desktop with Web Interface ](https://aws.amazon.com/marketplace/pp/prodview-vkoypmw6w3ta2)
@@ -21,3 +21,7 @@
 ### Modify The Final Parameters and hit launch
 
 ![Launch](https://github.com/Nhaila-Abdessamad/CloudFormation/blob/main/Figs/Launch.png)
+
+
+## How To Decomission A Machine that you created
+
