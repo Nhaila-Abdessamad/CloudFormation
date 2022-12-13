@@ -11,7 +11,7 @@ will respond with the excel file described above
 > There is mainly two types of enviornements we provide: Web Interfaced ubuntu Machines, and Amazon-Linux EC2 Instances
 
 > The former is delivered through the AWS Console, yet, it's in the process of being delivered with CloudFormation.
-Follow this link: [linlk](link) to be able to launch these machines.
+Follow this link: [ubuntu-marketPlace](https://github.com/Nhaila-Abdessamad/CloudFormation/blob/main/ubuntu-marketPlace.md) to be able to launch these machines.
 
 > The Latter is Delivered trhough CloudFormation, Follow These Instructions to be able to launch environements with CF.
 
