@@ -7,10 +7,17 @@
 
 
 ### Subscrine to the Product
-![ CloudFormation Landing Page](https://github.com/Nhaila-Abdessamad/CloudFormation/blob/main/Figs/CF%20Landing.png "Text to show on mouseover")
+![ CloudFormation Landing Page](https://github.com/Nhaila-Abdessamad/CloudFormation/blob/main/Figs/Product%20Landing%20Page.png "Text to show on mouseover")
 
 
 ### Click Continue Configuration
+![Continue to Configuration](https://github.com/Nhaila-Abdessamad/CloudFormation/blob/main/Figs/Continue%20Config.png)
 
 
+![Configuration](https://github.com/Nhaila-Abdessamad/CloudFormation/blob/main/Figs/Configuration.png)
 ### Click Continue to Launch
+
+
+### Modify The Final Parameters and hit launch
+
+![Launch](https://github.com/Nhaila-Abdessamad/CloudFormation/blob/main/Figs/Launch.png)
