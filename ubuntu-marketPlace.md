@@ -14,9 +14,9 @@
 ![Continue to Configuration](https://github.com/Nhaila-Abdessamad/CloudFormation/blob/main/Figs/Continue%20Config.png)
 
 
-![Configuration](https://github.com/Nhaila-Abdessamad/CloudFormation/blob/main/Figs/Configuration.png)
-### Click Continue to Launch
 
+### Click Continue to Launch
+![Configuration](https://github.com/Nhaila-Abdessamad/CloudFormation/blob/main/Figs/Configuration.png)
 
 ### Modify The Final Parameters and hit launch
 
