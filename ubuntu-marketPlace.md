@@ -30,3 +30,7 @@
 - than choose Terminate in Actions Drop down. Easy Peasy.
 
 ![EC2 Management](https://github.com/Nhaila-Abdessamad/CloudFormation/blob/main/Figs/EC2%20Instances.png)
+
+
+## Pricing of these resources
+
