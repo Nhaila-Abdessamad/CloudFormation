@@ -34,3 +34,6 @@
 
 ## Pricing of these resources
 
+- Keep that the price of any service varies depending on the REGION in which you deploy and the resources its using. 
+
+![PRICING](https://github.com/Nhaila-Abdessamad/CloudFormation/blob/main/Figs/Pricing.png)
