@@ -34,6 +34,12 @@
 
 ## Pricing of these resources
 
-- Keep that the price of any service varies depending on the REGION in which you deploy and the resources its using. 
 
 ![PRICING](https://github.com/Nhaila-Abdessamad/CloudFormation/blob/main/Figs/Pricing.png)
+
+- based on this table and if we take t2.medium instance type as a reference we can infer important timeframe pricings
+- 8H : 0.608 $
+- 24H: 1.824 $
+- 1 Month : 56.455 $
+
+- Keep in mind that the price of any service varies depending on the REGION in which you deploy and the resources its using. 
